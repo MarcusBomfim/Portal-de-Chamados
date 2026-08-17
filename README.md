@@ -2,7 +2,9 @@
 
 Sistema web para registrar e acompanhar solicitações de suporte das unidades de saúde de São Vicente. Os usuários poderão abrir ocorrências e acompanhar o atendimento, enquanto técnicos e administradores farão a triagem, responderão e atualizarão os chamados.
 
-## Tecnologias iniciais
+## Tecnologias
+
+### Interface
 
 - React
 - TypeScript
@@ -10,6 +12,16 @@ Sistema web para registrar e acompanhar solicitações de suporte das unidades d
 - React Router
 - CSS
 - Lucide React
+
+### API e banco de dados
+
+- Node.js
+- Express
+- PostgreSQL
+- Driver `pg`
+- Zod
+- Helmet e CORS
+- Docker Compose
 
 ## Perfis de acesso
 
@@ -31,14 +43,50 @@ Um chamado também pode ser cancelado enquanto ainda estiver em atendimento. Cha
 - [x] Modelagem dos usuários, unidades, chamados, mensagens e anexos
 - [x] Definição das permissões e regras de mudança de status
 - [x] Layout responsivo e navegação entre as páginas-base
+- [x] Estrutura inicial da API e do PostgreSQL
 - [ ] Cadastro, login e controle de acesso
 - [ ] Abertura, acompanhamento e respostas dos chamados
-- [ ] Integração com PostgreSQL
-- [ ] Testes, Docker e documentação final
+- [ ] Testes, containerização completa e documentação final
 
-## Executando o projeto
+## Preparando o projeto
+
+Instale as dependências da interface e da API:
 
 ```bash
 npm.cmd install
-npm.cmd run dev
+cd server
+npm.cmd install
+cd ..
 ```
+
+Crie o arquivo local de configuração da API:
+
+```powershell
+Copy-Item server\.env.example server\.env
+```
+
+Inicie o PostgreSQL:
+
+```bash
+docker compose up -d database
+```
+
+## Executando
+
+Use dois terminais na pasta principal do projeto.
+
+Terminal da interface:
+
+```bash
+npm.cmd run dev:web
+```
+
+Terminal da API:
+
+```bash
+npm.cmd run dev:api
+```
+
+A API será executada em `http://localhost:3333`. A rota
+`GET /api/health` confirma se o servidor está funcionando e
+`GET /api/health/database` verifica a conexão com o PostgreSQL.
