@@ -1,32 +1,43 @@
-# React + TypeScript + Vite
+# Portal de Chamados
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Sistema web para registrar e acompanhar solicitações de suporte das unidades de saúde de São Vicente. Os usuários poderão abrir ocorrências e acompanhar o atendimento, enquanto técnicos e administradores farão a triagem, responderão e atualizarão os chamados.
 
-Currently, two official plugins are available:
+## Tecnologias iniciais
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React
+- TypeScript
+- Vite
+- CSS
+- Lucide React
 
-## React Compiler
+## Perfis de acesso
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Solicitante:** abre chamados, acompanha os próprios registros e responde ao atendimento.
+- **Técnico:** visualiza a fila, assume chamados, responde e altera o andamento.
+- **Administrador:** possui acesso completo e gerencia usuários e unidades.
 
-## Expanding the Oxlint configuration
+## Fluxo de um chamado
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```text
+Aberto -> Em atendimento -> Aguardando usuário -> Resolvido -> Fechado
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Um chamado também pode ser cancelado enquanto ainda estiver em atendimento. Chamados resolvidos podem ser reabertos antes do fechamento.
+
+## Etapas concluídas
+
+- [x] Criação da base React com TypeScript
+- [x] Modelagem dos usuários, unidades, chamados, mensagens e anexos
+- [x] Definição das permissões e regras de mudança de status
+- [ ] Layout e navegação
+- [ ] Cadastro, login e controle de acesso
+- [ ] Abertura, acompanhamento e respostas dos chamados
+- [ ] Integração com PostgreSQL
+- [ ] Testes, Docker e documentação final
+
+## Executando o projeto
+
+```bash
+npm.cmd install
+npm.cmd run dev
+```
