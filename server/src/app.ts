@@ -6,6 +6,8 @@ import { env } from './config/env.js'
 import { errorHandler } from './middlewares/errorHandler.js'
 import { healthRouter } from './routes/health.routes.js'
 import { authRouter } from './routes/auth.routes.js'
+import { ticketRouter } from './routes/ticket.routes.js'
+import { unitRouter } from './routes/unit.routes.js'
 
 export const app = express()
 
@@ -22,6 +24,8 @@ app.use(cookieParser())
 
 app.use('/api/health', healthRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/units', unitRouter)
+app.use('/api/tickets', ticketRouter)
 
 app.use((_request, response) => {
   response.status(404).json({ message: 'Rota não encontrada.' })

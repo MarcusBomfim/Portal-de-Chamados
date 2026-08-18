@@ -16,7 +16,11 @@ const pageTitles: Record<string, string> = {
 
 export function Header({ onMenuOpen }: HeaderProps) {
   const { pathname } = useLocation()
-  const title = pageTitles[pathname] ?? 'Portal de Chamados'
+  const title = pathname.startsWith('/chamados/')
+    ? pathname === '/chamados/novo'
+      ? 'Novo chamado'
+      : 'Detalhes do chamado'
+    : (pageTitles[pathname] ?? 'Portal de Chamados')
 
   return (
     <header className="app-header">

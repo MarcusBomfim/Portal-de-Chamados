@@ -8,8 +8,11 @@ import { AppLayout } from './components/layout/AppLayout'
 import { AuthProvider } from './contexts/AuthContext'
 import { DashboardPage } from './pages/DashboardPage'
 import { LoginPage } from './pages/LoginPage'
+import { NewTicketPage } from './pages/NewTicketPage'
 import { PlaceholderPage } from './pages/PlaceholderPage'
 import { RegisterPage } from './pages/RegisterPage'
+import { TicketDetailPage } from './pages/TicketDetailPage'
+import { TicketListPage } from './pages/TicketListPage'
 
 function App() {
   return (
@@ -26,12 +29,13 @@ function App() {
               <Route index element={<DashboardPage />} />
               <Route
                 path="chamados"
-                element={<PlaceholderPage title="Meus chamados" />}
+                element={<TicketListPage />}
               />
               <Route
                 path="chamados/novo"
-                element={<PlaceholderPage title="Novo chamado" />}
+                element={<NewTicketPage />}
               />
+              <Route path="chamados/:ticketId" element={<TicketDetailPage />} />
               <Route
                 path="base-conhecimento"
                 element={<PlaceholderPage title="Base de conhecimento" />}
@@ -41,7 +45,7 @@ function App() {
               >
                 <Route
                   path="admin/fila"
-                  element={<PlaceholderPage title="Fila de atendimento" />}
+                  element={<TicketListPage mode="queue" />}
                 />
               </Route>
               <Route element={<RequireRole allowedRoles={['ADMIN']} />}>

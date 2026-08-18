@@ -17,3 +17,16 @@ export function validateBody(schema: ZodType) {
     next()
   }
 }
+
+export function validateParams(schema: ZodType) {
+  return (request: Request, response: Response, next: NextFunction) => {
+    const result = schema.safeParse(request.params)
+
+    if (!result.success) {
+      response.status(400).json({ message: 'Identificador inválido.' })
+      return
+    }
+
+    next()
+  }
+}

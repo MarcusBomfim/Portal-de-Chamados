@@ -45,7 +45,7 @@ Um chamado também pode ser cancelado enquanto ainda estiver em atendimento. Cha
 - [x] Layout responsivo e navegação entre as páginas-base
 - [x] Estrutura inicial da API e do PostgreSQL
 - [x] Cadastro, login, sessão e controle de acesso por perfil
-- [ ] Abertura, acompanhamento e respostas dos chamados
+- [x] Abertura, acompanhamento, respostas e atualização dos chamados
 - [ ] Testes, containerização completa e documentação final
 
 ## Preparando o projeto
@@ -71,11 +71,12 @@ Inicie o PostgreSQL:
 docker compose up -d database
 ```
 
-Se o banco já tiver sido criado antes da etapa de autenticação, aplique a nova
-migração uma única vez:
+Se o banco já tiver sido criado nas etapas anteriores, aplique as migrações
+incrementais:
 
 ```bash
 docker compose exec database psql -U portal_admin -d portal_chamados -f /docker-entrypoint-initdb.d/002_auth_sessions.sql
+docker compose exec database psql -U portal_admin -d portal_chamados -f /docker-entrypoint-initdb.d/003_ticket_workflow.sql
 ```
 
 ## Executando
@@ -107,3 +108,14 @@ A API será executada em `http://localhost:3333`. A rota
 - As tentativas de cadastro e login possuem limite por intervalo de tempo.
 - Novos cadastros recebem apenas o perfil de solicitante.
 - As rotas administrativas verificam o perfil do usuário.
+
+## Chamados
+
+- O solicitante escolhe a unidade, categoria e prioridade da ocorrência.
+- Cada chamado recebe um protocolo sequencial.
+- Solicitantes visualizam somente os próprios chamados.
+- Técnicos e administradores visualizam a fila completa.
+- Técnicos podem assumir atendimentos e atualizar o status.
+- Solicitantes e equipe podem conversar pelo histórico do chamado.
+- A equipe pode registrar notas internas invisíveis para o solicitante.
+- Chamados fechados ou cancelados não recebem novas respostas.

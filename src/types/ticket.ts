@@ -31,8 +31,11 @@ export interface Ticket {
   priority: TicketPriority
   category: TicketCategory
   requesterId: string
+  requesterName: string
   unitId: string
+  unitName: string
   assignedTechnicianId: string | null
+  assignedTechnicianName: string | null
   createdAt: string
   updatedAt: string
   resolvedAt: string | null
@@ -43,6 +46,8 @@ export interface TicketMessage {
   id: string
   ticketId: string
   authorId: string
+  authorName: string
+  authorRole: 'REQUESTER' | 'TECHNICIAN' | 'ADMIN'
   content: string
   internal: boolean
   createdAt: string
