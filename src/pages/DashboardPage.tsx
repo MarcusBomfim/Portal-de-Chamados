@@ -1,12 +1,16 @@
 import { ArrowRight, BookOpen, ClipboardList, Headset, Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../contexts/auth-context'
 
 export function DashboardPage() {
+  const { user } = useAuth()
+  const firstName = user?.fullName.split(' ')[0] ?? 'usuário'
+
   return (
     <section className="dashboard-page">
       <div className="page-heading">
         <span className="eyebrow">CENTRAL DE ATENDIMENTO</span>
-        <h1>Bom dia, Marcus.</h1>
+        <h1>Olá, {firstName}.</h1>
         <p>
           Registre solicitações e acompanhe o suporte prestado às unidades de
           saúde em um só lugar.

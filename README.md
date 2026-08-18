@@ -44,7 +44,7 @@ Um chamado também pode ser cancelado enquanto ainda estiver em atendimento. Cha
 - [x] Definição das permissões e regras de mudança de status
 - [x] Layout responsivo e navegação entre as páginas-base
 - [x] Estrutura inicial da API e do PostgreSQL
-- [ ] Cadastro, login e controle de acesso
+- [x] Cadastro, login, sessão e controle de acesso por perfil
 - [ ] Abertura, acompanhamento e respostas dos chamados
 - [ ] Testes, containerização completa e documentação final
 
@@ -71,6 +71,13 @@ Inicie o PostgreSQL:
 docker compose up -d database
 ```
 
+Se o banco já tiver sido criado antes da etapa de autenticação, aplique a nova
+migração uma única vez:
+
+```bash
+docker compose exec database psql -U portal_admin -d portal_chamados -f /docker-entrypoint-initdb.d/002_auth_sessions.sql
+```
+
 ## Executando
 
 Use dois terminais na pasta principal do projeto.
@@ -90,3 +97,13 @@ npm.cmd run dev:api
 A API será executada em `http://localhost:3333`. A rota
 `GET /api/health` confirma se o servidor está funcionando e
 `GET /api/health/database` verifica a conexão com o PostgreSQL.
+
+## Autenticação
+
+- As senhas são armazenadas somente como hash `scrypt` com salt individual.
+- A sessão utiliza um token aleatório armazenado no navegador em cookie
+  `HttpOnly` e `SameSite=Strict`.
+- No banco de dados é salvo somente o hash do token da sessão.
+- As tentativas de cadastro e login possuem limite por intervalo de tempo.
+- Novos cadastros recebem apenas o perfil de solicitante.
+- As rotas administrativas verificam o perfil do usuário.
