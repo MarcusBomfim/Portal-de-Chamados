@@ -1,0 +1,11 @@
+node_modules
+server/node_modules
+dist
+server/dist
+.git
+.vscode
+*.log
+.env
+.env.*
+server/storage/uploads
+README.md

@@ -41,7 +41,7 @@ export function getSessionTokenHash(token: string) {
 export function setSessionCookie(response: Response, token: string) {
   response.cookie(SESSION_COOKIE_NAME, token, {
     httpOnly: true,
-    secure: env.NODE_ENV === 'production',
+    secure: env.COOKIE_SECURE,
     sameSite: 'strict',
     path: '/',
     maxAge: SESSION_DURATION_MS,
@@ -51,7 +51,7 @@ export function setSessionCookie(response: Response, token: string) {
 export function clearSessionCookie(response: Response) {
   response.clearCookie(SESSION_COOKIE_NAME, {
     httpOnly: true,
-    secure: env.NODE_ENV === 'production',
+    secure: env.COOKIE_SECURE,
     sameSite: 'strict',
     path: '/',
   })
