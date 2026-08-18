@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
 import { AppError } from '../errors/AppError.js'
+import { listTicketAttachments } from '../repositories/attachment.repository.js'
 import {
   assignTicketToTechnician,
   changeTicketStatus,
@@ -44,8 +45,11 @@ export async function showTicket(
       throw new AppError('Chamado não encontrado.', 404)
     }
 
-    const messages = await listTicketMessages(ticketId, user)
-    response.status(200).json({ ticket, messages })
+    const [messages, attachments] = await Promise.all([
+      listTicketMessages(ticketId, user),
+      listTicketAttachments(ticketId),
+    ])
+    response.status(200).json({ ticket, messages, attachments })
   } catch (error) {
     next(error)
   }

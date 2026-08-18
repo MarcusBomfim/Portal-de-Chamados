@@ -7,13 +7,20 @@ import {
   storeTicket,
   updateStatus,
 } from '../controllers/ticket.controller.js'
+import {
+  downloadAttachment,
+  storeAttachment,
+} from '../controllers/attachment.controller.js'
+import { uploadAttachment } from '../config/upload.js'
 import { authenticate, requireRole } from '../middlewares/authenticate.js'
+import { authorizeTicketAccess } from '../middlewares/authorizeTicketAccess.js'
 import {
   validateBody,
   validateParams,
 } from '../middlewares/validateRequest.js'
 import {
   changeTicketStatusSchema,
+  attachmentParamSchema,
   createMessageSchema,
   createTicketSchema,
   ticketIdParamSchema,
@@ -30,6 +37,19 @@ ticketRouter.post(
   validateParams(ticketIdParamSchema),
   validateBody(createMessageSchema),
   storeMessage,
+)
+ticketRouter.post(
+  '/:ticketId/attachments',
+  validateParams(ticketIdParamSchema),
+  authorizeTicketAccess,
+  uploadAttachment.single('file'),
+  storeAttachment,
+)
+ticketRouter.get(
+  '/:ticketId/attachments/:attachmentId',
+  validateParams(attachmentParamSchema),
+  authorizeTicketAccess,
+  downloadAttachment,
 )
 ticketRouter.patch(
   '/:ticketId/status',

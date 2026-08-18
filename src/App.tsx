@@ -7,6 +7,7 @@ import {
 import { AppLayout } from './components/layout/AppLayout'
 import { AuthProvider } from './contexts/AuthContext'
 import { DashboardPage } from './pages/DashboardPage'
+import { AdminManagementPage } from './pages/AdminManagementPage'
 import { LoginPage } from './pages/LoginPage'
 import { NewTicketPage } from './pages/NewTicketPage'
 import { PlaceholderPage } from './pages/PlaceholderPage'
@@ -51,7 +52,7 @@ function App() {
               <Route element={<RequireRole allowedRoles={['ADMIN']} />}>
                 <Route
                   path="admin/usuarios"
-                  element={<PlaceholderPage title="Usuários e unidades" />}
+                  element={<AdminManagementPage />}
                 />
               </Route>
             </Route>

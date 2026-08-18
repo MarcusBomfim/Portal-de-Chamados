@@ -21,6 +21,7 @@ Sistema web para registrar e acompanhar solicitações de suporte das unidades d
 - Driver `pg`
 - Zod
 - Helmet e CORS
+- Multer
 - Docker Compose
 
 ## Perfis de acesso
@@ -46,6 +47,7 @@ Um chamado também pode ser cancelado enquanto ainda estiver em atendimento. Cha
 - [x] Estrutura inicial da API e do PostgreSQL
 - [x] Cadastro, login, sessão e controle de acesso por perfil
 - [x] Abertura, acompanhamento, respostas e atualização dos chamados
+- [x] Anexos protegidos e administração de usuários e unidades
 - [ ] Testes, containerização completa e documentação final
 
 ## Preparando o projeto
@@ -77,6 +79,7 @@ incrementais:
 ```bash
 docker compose exec database psql -U portal_admin -d portal_chamados -f /docker-entrypoint-initdb.d/002_auth_sessions.sql
 docker compose exec database psql -U portal_admin -d portal_chamados -f /docker-entrypoint-initdb.d/003_ticket_workflow.sql
+docker compose exec database psql -U portal_admin -d portal_chamados -f /docker-entrypoint-initdb.d/004_attachment_indexes.sql
 ```
 
 ## Executando
@@ -119,3 +122,23 @@ A API será executada em `http://localhost:3333`. A rota
 - Solicitantes e equipe podem conversar pelo histórico do chamado.
 - A equipe pode registrar notas internas invisíveis para o solicitante.
 - Chamados fechados ou cancelados não recebem novas respostas.
+
+## Anexos
+
+- São aceitos arquivos PDF, JPG, PNG e TXT de até 5 MB.
+- Os nomes físicos são aleatórios para evitar conflitos e exposição de caminhos.
+- Os arquivos ficam em `server/storage/uploads` e não são publicados diretamente.
+- O download passa pela autenticação e pela permissão de acesso ao chamado.
+- Os metadados dos anexos são armazenados no PostgreSQL.
+
+## Primeiro administrador
+
+Depois de criar uma conta pela tela de cadastro, promova esse usuário pelo
+terminal. Nenhuma senha administrativa padrão é criada pelo projeto.
+
+```bash
+npm.cmd --prefix server run user:promote -- seu-email@exemplo.com
+```
+
+O administrador pode alterar perfis, vincular usuários às unidades, bloquear
+acessos e cadastrar ou desativar unidades de saúde.

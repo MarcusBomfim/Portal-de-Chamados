@@ -2,7 +2,9 @@ import {
   ArrowLeft,
   CalendarClock,
   CheckCircle2,
+  Download,
   MessageSquare,
+  Paperclip,
   Send,
   UserCheck,
 } from 'lucide-react'
@@ -10,7 +12,12 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '../contexts/auth-context'
 import { apiRequest } from '../services/api'
-import type { Ticket, TicketMessage, TicketStatus } from '../types'
+import type {
+  Ticket,
+  TicketAttachment,
+  TicketMessage,
+  TicketStatus,
+} from '../types'
 import {
   categoryLabels,
   formatDate,
@@ -30,9 +37,11 @@ export function TicketDetailPage() {
   const { user } = useAuth()
   const [ticket, setTicket] = useState<Ticket | null>(null)
   const [messages, setMessages] = useState<TicketMessage[]>([])
+  const [attachments, setAttachments] = useState<TicketAttachment[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSending, setIsSending] = useState(false)
   const [isUpdating, setIsUpdating] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState('')
   const isStaff = user?.role === 'TECHNICIAN' || user?.role === 'ADMIN'
 
@@ -43,9 +52,11 @@ export function TicketDetailPage() {
       const response = await apiRequest<{
         ticket: Ticket
         messages: TicketMessage[]
+        attachments: TicketAttachment[]
       }>(`/api/tickets/${ticketId}`)
       setTicket(response.ticket)
       setMessages(response.messages)
+      setAttachments(response.attachments)
     } catch (requestError) {
       setError(
         requestError instanceof Error
@@ -140,6 +151,47 @@ export function TicketDetailPage() {
       )
     } finally {
       setIsUpdating(false)
+    }
+  }
+
+  async function handleAttachmentUpload(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!ticketId) return
+
+    const form = event.currentTarget
+    const input = form.elements.namedItem('file') as HTMLInputElement
+    const file = input.files?.[0]
+
+    if (!file) {
+      setError('Selecione um arquivo para enviar.')
+      return
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError('O arquivo deve ter no máximo 5 MB.')
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('file', file)
+    setError('')
+    setIsUploading(true)
+
+    try {
+      const response = await apiRequest<{ attachment: TicketAttachment }>(
+        `/api/tickets/${ticketId}/attachments`,
+        { method: 'POST', body: formData },
+      )
+      setAttachments((current) => [response.attachment, ...current])
+      form.reset()
+    } catch (requestError) {
+      setError(
+        requestError instanceof Error
+          ? requestError.message
+          : 'Não foi possível enviar o anexo.',
+      )
+    } finally {
+      setIsUploading(false)
     }
   }
 
@@ -318,8 +370,57 @@ export function TicketDetailPage() {
               Chamado marcado como resolvido.
             </div>
           )}
+
+          <div className="attachment-section">
+            <div className="attachment-heading">
+              <Paperclip size={17} />
+              <h3>Anexos</h3>
+              <span>{attachments.length}</span>
+            </div>
+
+            <div className="attachment-list">
+              {attachments.length === 0 && <small>Nenhum arquivo enviado.</small>}
+              {attachments.map((attachment) => (
+                <a
+                  key={attachment.id}
+                  className="attachment-item"
+                  href={`/api/tickets/${ticket.id}/attachments/${attachment.id}`}
+                >
+                  <span>
+                    <strong>{attachment.fileName}</strong>
+                    <small>{formatFileSize(attachment.sizeInBytes)}</small>
+                  </span>
+                  <Download size={16} />
+                </a>
+              ))}
+            </div>
+
+            {!isFinished && (
+              <form className="attachment-form" onSubmit={handleAttachmentUpload}>
+                <label>
+                  <input
+                    name="file"
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png,.txt"
+                    required
+                  />
+                  PDF, JPG, PNG ou TXT · até 5 MB
+                </label>
+                <button type="submit" disabled={isUploading}>
+                  <Paperclip size={15} />
+                  {isUploading ? 'Enviando...' : 'Anexar arquivo'}
+                </button>
+              </form>
+            )}
+          </div>
         </aside>
       </div>
     </section>
   )
+}
+
+function formatFileSize(sizeInBytes: number) {
+  if (sizeInBytes < 1024) return `${sizeInBytes} B`
+  if (sizeInBytes < 1024 * 1024) return `${Math.round(sizeInBytes / 1024)} KB`
+  return `${(sizeInBytes / (1024 * 1024)).toFixed(1)} MB`
 }

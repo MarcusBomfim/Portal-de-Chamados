@@ -631,6 +631,136 @@
   font-weight: 750;
 }
 
+.attachment-section {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.attachment-heading {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--teal-600);
+}
+
+.attachment-heading h3 {
+  margin: 0;
+  color: var(--ink-900);
+  font-size: 0.86rem;
+}
+
+.attachment-heading > span {
+  display: grid;
+  min-width: 21px;
+  height: 21px;
+  place-items: center;
+  padding: 0 5px;
+  border-radius: 999px;
+  color: var(--ink-700);
+  background: #e8eff2;
+  font-size: 0.61rem;
+  font-weight: 800;
+}
+
+.attachment-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.attachment-list > small {
+  color: var(--ink-500);
+  font-size: 0.68rem;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px;
+  border: 1px solid #e4ecef;
+  border-radius: 8px;
+  color: var(--ink-500);
+  background: #f9fbfc;
+}
+
+.attachment-item:hover {
+  border-color: #bcd4dc;
+  color: var(--teal-600);
+}
+
+.attachment-item > span {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 2px;
+}
+
+.attachment-item strong {
+  overflow: hidden;
+  color: var(--ink-900);
+  font-size: 0.68rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.attachment-item small {
+  color: var(--ink-500);
+  font-size: 0.6rem;
+}
+
+.attachment-form {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.attachment-form label {
+  display: grid;
+  gap: 5px;
+  color: var(--ink-500);
+  font-size: 0.59rem;
+  line-height: 1.4;
+}
+
+.attachment-form input {
+  width: 100%;
+  color: var(--ink-700);
+  font-size: 0.65rem;
+}
+
+.attachment-form input::file-selector-button {
+  margin-right: 7px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--ink-700);
+  background: #ffffff;
+  font-size: 0.63rem;
+  cursor: pointer;
+}
+
+.attachment-form button {
+  display: inline-flex;
+  min-height: 35px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  background: var(--teal-600);
+  font-size: 0.68rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.attachment-form button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
 .page-error {
   margin-bottom: 18px;
 }

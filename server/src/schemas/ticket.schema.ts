@@ -35,3 +35,8 @@ export const changeTicketStatusSchema = z.object({
 export const ticketIdParamSchema = z.object({
   ticketId: z.uuid(),
 })
+
+export const attachmentParamSchema = z.object({
+  ticketId: z.uuid(),
+  attachmentId: z.uuid(),
+})

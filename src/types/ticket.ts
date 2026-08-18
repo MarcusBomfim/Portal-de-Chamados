@@ -58,9 +58,9 @@ export interface TicketAttachment {
   ticketId: string
   messageId: string | null
   fileName: string
-  fileUrl: string
   contentType: string
   sizeInBytes: number
   uploadedById: string
+  uploadedByName: string
   createdAt: string
 }
